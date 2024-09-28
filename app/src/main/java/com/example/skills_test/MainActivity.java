@@ -3,7 +3,9 @@ package com.example.skills_test;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -18,14 +20,18 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView appList;
+    private ListView listView;
+    private ArrayAdapter<String> appListAdapter; // Adapter for the ListView
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        appList = (TextView) findViewById(R.id.appList);
 
+        listView = (ListView) findViewById(R.id.listView);
+        appListAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
+        listView.setAdapter(appListAdapter);
         // Retrieve app usage data
         getAppUsageStats();
 
@@ -37,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getAppUsageStats() {
-        appList.setText("");
+
 
         // Get the UsageStatsManager
         UsageStatsManager usageStatsManager = (UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE);
@@ -59,12 +65,12 @@ public class MainActivity extends AppCompatActivity {
                 long totalTimeInForeground = usageStats.getTotalTimeInForeground();
 
                 // Print or display the app usage data
-                appList.append(String.format("Package: %s, Time Used: %d ms. %n", packageName, totalTimeInForeground));
 
+                appListAdapter.add(String.format("Package: %s, Time Used: %d ms.", packageName, totalTimeInForeground));
             }
         } else {
             // Prompt user to enable usage access permission
-            appList.append("No usage data available. Please ensure usage access is enabled for this app.");
+            appListAdapter.add("No usage data available. Please ensure usage access is enabled for this app.");
         }
     }
 }
