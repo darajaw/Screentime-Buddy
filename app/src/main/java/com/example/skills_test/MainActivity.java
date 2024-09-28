@@ -6,14 +6,14 @@ import android.provider.Settings;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.ScrollView;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 
 import java.util.Calendar;
 import java.util.List;
@@ -28,10 +28,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-        listView = (ListView) findViewById(R.id.listView);
+        listView = findViewById(R.id.listView);
         appListAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
         listView.setAdapter(appListAdapter);
+
         // Retrieve app usage data
         getAppUsageStats();
 
@@ -43,8 +43,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getAppUsageStats() {
-
-
         // Get the UsageStatsManager
         UsageStatsManager usageStatsManager = (UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE);
 
@@ -64,13 +62,27 @@ public class MainActivity extends AppCompatActivity {
                 String packageName = usageStats.getPackageName();
                 long totalTimeInForeground = usageStats.getTotalTimeInForeground();
 
-                // Print or display the app usage data
-
-                appListAdapter.add(String.format("Package: %s, Time Used: %d ms.", packageName, totalTimeInForeground));
+                // Check if the app is a system app
+                if (!isSystemApp(packageName)) {
+                    // Print or display the app usage data
+                    appListAdapter.add(String.format("Package: %s, Time Used: %d ms.", packageName, totalTimeInForeground));
+                }
             }
         } else {
             // Prompt user to enable usage access permission
             appListAdapter.add("No usage data available. Please ensure usage access is enabled for this app.");
+        }
+    }
+
+    // Helper method to determine if an app is a system app (source: chatGPT)
+    private boolean isSystemApp(String packageName) {
+        try {
+            // Get application info for the package
+            ApplicationInfo appInfo = getPackageManager().getApplicationInfo(packageName, 0);
+            return (appInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            return false; // If the app is not found, consider it not a system app
         }
     }
 }
