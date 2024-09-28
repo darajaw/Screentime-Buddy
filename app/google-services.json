@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "51668044533",
+    "project_id": "screentime-buddy",
+    "storage_bucket": "screentime-buddy.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:51668044533:android:5098e5f43ed3f9874793bc",
+        "android_client_info": {
+          "package_name": "com.example.skills_test"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "51668044533-l8mf4ocelplsihn0dgmpo26d9oblrq0v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4GVr-5NY-O2kEG-ML3PEE7T7K2H9nyac"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "51668044533-l8mf4ocelplsihn0dgmpo26d9oblrq0v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
