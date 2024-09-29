@@ -1,9 +1,12 @@
+// MainActivity.java
 package com.example.skills_test;
 
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
@@ -12,16 +15,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
 import android.content.Context;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     private ListView listView;
-    private ArrayAdapter<String> appListAdapter; // Adapter for the ListView
+    private AppList appListAdapter; // Custom adapter for the ListView
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         listView = findViewById(R.id.listView);
-        appListAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
+        appListAdapter = new AppList(this, new ArrayList<>()); // Initialize custom adapter
         listView.setAdapter(appListAdapter);
 
         // Retrieve app usage data
@@ -43,18 +46,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getAppUsageStats() {
+        appListAdapter.clear();
+
         // Get the UsageStatsManager
         UsageStatsManager usageStatsManager = (UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE);
 
         // Set the time range (last 24 hours)
         Calendar calendar = Calendar.getInstance();
         long endTime = calendar.getTimeInMillis();
-        calendar.add(Calendar.DAY_OF_YEAR, -1);
+        calendar.add(Calendar.DAY_OF_YEAR, -7);
         long startTime = calendar.getTimeInMillis();
 
         // Query the usage stats
         List<UsageStats> usageStatsList = usageStatsManager.queryUsageStats(
                 UsageStatsManager.INTERVAL_DAILY, startTime, endTime);
+
+        List<AppDetails> appDetails = new ArrayList<>();
 
         // Process and display the usage data
         if (usageStatsList != null && !usageStatsList.isEmpty()) {
@@ -62,27 +69,32 @@ public class MainActivity extends AppCompatActivity {
                 String packageName = usageStats.getPackageName();
                 long totalTimeInForeground = usageStats.getTotalTimeInForeground();
 
-                // Check if the app is a system app
-                if (!isSystemApp(packageName)) {
-                    // Print or display the app usage data
-                    appListAdapter.add(String.format("Package: %s, Time Used: %d ms.", packageName, totalTimeInForeground));
+                // Check if the app has usage time and is not a system app
+                if (totalTimeInForeground > 0 ) {
+                    try {
+                        // Get app name and icon
+                        ApplicationInfo appObject = getPackageManager().getApplicationInfo(packageName, 0);
+                        String appName = appObject.loadLabel(getPackageManager()).toString();
+                        Drawable appIcon = appObject.loadIcon(getPackageManager());
+
+                        // Add app info to the list
+                        appDetails.add(new AppDetails(appName, appIcon, totalTimeInForeground));
+                    }
+                    catch (NameNotFoundException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
-        } else {
-            // Prompt user to enable usage access permission
-            appListAdapter.add("No usage data available. Please ensure usage access is enabled for this app.");
-        }
-    }
 
-    // Helper method to determine if an app is a system app (source: chatGPT)
-    private boolean isSystemApp(String packageName) {
-        try {
-            // Get application info for the package
-            ApplicationInfo appInfo = getPackageManager().getApplicationInfo(packageName, 0);
-            return (appInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0;
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-            return false; // If the app is not found, consider it not a system app
+            // Update the adapter with the app info list
+            appListAdapter.clear();
+            appListAdapter.addAll(appDetails);
+            appListAdapter.notifyDataSetChanged();
+        } else {
+
+            AppDetails nullInfo = new AppDetails("No usage data available.", null, 0);
+
+            appListAdapter.add(nullInfo);
         }
     }
 }
