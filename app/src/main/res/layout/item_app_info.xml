@@ -22,14 +22,13 @@
     <!-- App Name -->
     <TextView
         android:id="@+id/app_name"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
+        android:layout_width="296dp"
+        android:layout_height="27dp"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toEndOf="@id/app_icon"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/app_icon"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="App Name" />
 
     <!-- Usage Time -->

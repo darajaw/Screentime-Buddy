@@ -18,7 +18,7 @@ import com.github.mikephil.charting.charts.PieChart;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FirstFragment extends Fragment {
+public class SecondFragment extends Fragment {
 
     private ListView listView;
     private AppList appListAdapter;
@@ -31,7 +31,7 @@ public class FirstFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.activity_main, container, false);
+        return inflater.inflate(R.layout.activity_main2, container, false);
     }
 
     @Override
@@ -77,13 +77,13 @@ public class FirstFragment extends Fragment {
         List<AppDetails> mockAppDetails = new ArrayList<>();
 
         // Data for mock apps: name, usage time (in minutes), and drawable resource
-        String[] appNames = {"TikTok", "Instagram", "Twitter","Facebook"};
-        long[] usageTimes = {120, 45, 30, 2}; // Usage time in minutes
+        String[] appNames = {"Pizza Hut", "FaceBook", "TikTok","Duolingo"};
+        long[] usageTimes = {500, 130, 45, 11}; // Usage time in minutes
         int[] iconResources = {
-                R.drawable.tiktok,
-                R.drawable.insta,
-                R.drawable.twitter,
+                R.drawable.zaza,
                 R.drawable.facebook,
+                R.drawable.tiktok,
+                R.drawable.duo
         };
 
         // Create mock AppDetails instances for each app
