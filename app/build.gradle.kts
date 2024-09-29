@@ -1,6 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
-    id("com.google.gms.google-services")
+    //id("com.google.gms.google-services")
 }
 
 android {
@@ -52,7 +52,7 @@ dependencies {
 
     // TODO: Add the dependencies for Firebase products you want to use
     // When using the BoM, don't specify versions in Firebase dependencies
-    implementation("com.google.firebase:firebase-analytics")
+    /*implementation("com.google.firebase:firebase-analytics")
 
 
     // Add the dependencies for any other desired Firebase products
@@ -61,5 +61,5 @@ dependencies {
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-firestore")
     implementation("com.google.firebase:firebase-messaging")
-    implementation("com.google.firebase:firebase-appcheck")
+    implementation("com.google.firebase:firebase-appcheck")*/
 }
