@@ -1,6 +1,11 @@
 package com.example.skills_test;
 
+import android.app.usage.UsageStats;
+import android.app.usage.UsageStatsManager;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.widget.ArrayAdapter;
@@ -9,19 +14,18 @@ import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.usage.UsageStats;
-import android.app.usage.UsageStatsManager;
-import android.content.Context;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
+import com.github.mikephil.charting.charts.PieChart;
 
 import java.util.Calendar;
 import java.util.List;
+
+
 
 public class MainActivity extends AppCompatActivity {
 
     private ListView listView;
     private ArrayAdapter<String> appListAdapter; // Adapter for the ListView
+    private PieChart pieChart; // PieChart for the donut chart
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +44,16 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
             startActivity(intent);
         });
+
+        // Initialize PieChart for donut chart
+        pieChart = findViewById(R.id.pieChart);
+
+        // Create an instance of DonutChart and pass the PieChart
+        DonutChart donutChart = new DonutChart(pieChart);
+
+        // Call the createDonutChart method to display the chart
+        donutChart.createDonutChart(this);
+
     }
 
     private void getAppUsageStats() {
@@ -85,4 +99,5 @@ public class MainActivity extends AppCompatActivity {
             return false; // If the app is not found, consider it not a system app
         }
     }
+    
 }
