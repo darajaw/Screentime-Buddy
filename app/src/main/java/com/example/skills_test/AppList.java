@@ -39,7 +39,7 @@ public class AppList extends ArrayAdapter<AppDetails> {
         if (appDetails != null) {
             appIcon.setImageDrawable(appDetails.icon);
             appName.setText(appDetails.name);
-            appUsage.setText(String.format("Time Used: %d ms", appDetails.totalTimeUsed));
+            appUsage.setText(String.format("Time Used: %s", appDetails.totalTimeUsed));
         }
 
         // Return the completed view to render on screen
