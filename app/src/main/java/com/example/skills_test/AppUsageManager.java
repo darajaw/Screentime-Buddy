@@ -24,39 +24,30 @@ public class AppUsageManager {
     public List<AppDetails> getAppUsageStats() {
         List<AppDetails> appDetails = new ArrayList<>();
 
-        // Set the time range (last 7 days)
         Calendar calendar = Calendar.getInstance();
         long endTime = calendar.getTimeInMillis();
-        calendar.add(Calendar.DAY_OF_YEAR, -7);
+        calendar.add(Calendar.DAY_OF_YEAR, -1); // Last 24 hours
         long startTime = calendar.getTimeInMillis();
 
-        // Query the usage stats
         List<UsageStats> usageStatsList = usageStatsManager.queryUsageStats(
                 UsageStatsManager.INTERVAL_DAILY, startTime, endTime);
 
-        // Process the usage data
         if (usageStatsList != null && !usageStatsList.isEmpty()) {
             for (UsageStats usageStats : usageStatsList) {
                 String packageName = usageStats.getPackageName();
                 long totalTimeInForeground = usageStats.getTotalTimeInForeground();
 
-                // Check if the app has usage time
                 if (totalTimeInForeground > 0) {
                     try {
                         ApplicationInfo appObject = packageManager.getApplicationInfo(packageName, 0);
                         String appName = appObject.loadLabel(packageManager).toString();
                         Drawable appIcon = appObject.loadIcon(packageManager);
-
                         appDetails.add(new AppDetails(appName, appIcon, totalTimeInForeground));
                     } catch (PackageManager.NameNotFoundException e) {
                         e.printStackTrace();
                     }
                 }
             }
-        }
-
-        if (appDetails.isEmpty()) {
-            appDetails.add(new AppDetails("No usage data available.", null, 0));
         }
 
         return appDetails;
