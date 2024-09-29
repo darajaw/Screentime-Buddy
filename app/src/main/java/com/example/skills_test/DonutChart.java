@@ -44,8 +44,9 @@ public class DonutChart {
         pieChart.setDrawHoleEnabled(true);
         pieChart.setHoleRadius(40f);
         pieChart.setHoleColor(android.graphics.Color.WHITE);
-        pieChart.setCenterText("App Usage");
         pieChart.setCenterTextSize(18f);
+
+        pieChart.getDescription().setEnabled(false);
 
         PieData data = new PieData(dataSet);
         pieChart.setData(data);
