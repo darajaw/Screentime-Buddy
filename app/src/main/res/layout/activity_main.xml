@@ -57,4 +57,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginBottom="28dp" />
 
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

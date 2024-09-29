@@ -7,7 +7,11 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.github.mikephil.charting.charts.PieChart;
 
@@ -23,11 +27,15 @@ public class MainActivity extends AppCompatActivity {
     private DonutChart donutChart;
     private TotalScreenTimeCalc totalScreenTimeCalc;
     private TextView totalTimeTextView;
+    private ViewPager2 viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        viewPager = findViewById(R.id.viewPager);
+        viewPager.setAdapter(new ScreenSlidePagerAdapter(this));
 
         // Initialize views
         listView = findViewById(R.id.listView);
@@ -86,5 +94,30 @@ public class MainActivity extends AppCompatActivity {
         appListAdapter.clear();
         appListAdapter.addAll(appDetailsList);
         appListAdapter.notifyDataSetChanged();
+    }
+
+    // Define the adapter as a private inner class, but outside of onCreate
+    private class ScreenSlidePagerAdapter extends FragmentStateAdapter {
+        public ScreenSlidePagerAdapter(@NonNull AppCompatActivity fragmentActivity) {
+            super(fragmentActivity);
+        }
+
+        @NonNull
+        @Override
+        public Fragment createFragment(int position) {
+            switch (position) {
+                case 0:
+                    return new FirstFragment();
+                case 1:
+                    return new SecondFragment();
+                default:
+                    return new FirstFragment();
+            }
+        }
+
+        @Override
+        public int getItemCount() {
+            return 2; // Number of fragments
+        }
     }
 }
